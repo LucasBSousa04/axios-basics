@@ -7,6 +7,7 @@ const baseURL = 'https://jsonplaceholder.typicode.com/posts';
 function App() {
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({ title: 'a' });
+  const [newPostBody, setNewPostBody] = useState('');
   useEffect(() => {
     async function getPosts() {
       setLoading(true);
@@ -37,9 +38,24 @@ function App() {
   async function deletePost() {
     setLoading(true);
     await axios.delete(`${baseURL}/${post.id}`)
-      .then((res) => console.log(res.data));
+      .then((res) => res.data);
     setPost(null);
     setLoading(false);
+  }
+
+  async function updatePostBody(e) {
+    e.preventDefault();
+    setLoading(true);
+    await axios
+      .put(`${baseURL}/${post.id}`, {
+        ...post,
+        body: newPostBody,
+      })
+      .then((res) => {
+        setPost(res.data);
+        setLoading(false);
+      })
+      .catch((err) => err);
   }
 
   if (!post) {
@@ -62,6 +78,20 @@ function App() {
             </p>
             <button onClick={createPost} type="button">Create post</button>
             <button onClick={deletePost} type="button">Delete post</button>
+            <form
+              onSubmit={(e) => updatePostBody(e)}
+            >
+              <input
+                type="text"
+                value={newPostBody}
+                onChange={(e) => setNewPostBody(e.target.value)}
+              />
+              <button
+                type="submit"
+              >
+                Update post body
+              </button>
+            </form>
           </>
         )}
     </div>
