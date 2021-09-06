@@ -8,13 +8,16 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({ title: 'a' });
   useEffect(() => {
-    setLoading(true);
-    axios.get(`${baseURL}/1`)
-      .then((res) => {
-        setPost(res.data);
-        setLoading(false);
-      })
-      .catch((err) => err);
+    async function getPosts() {
+      setLoading(true);
+      await axios.get(`${baseURL}/1`)
+        .then((res) => {
+          setPost(res.data);
+          setLoading(false);
+        })
+        .catch((err) => err);
+    }
+    getPosts();
   }, []);
 
   async function createPost() {
