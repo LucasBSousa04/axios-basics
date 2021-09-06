@@ -4,6 +4,13 @@ import axios from 'axios';
 
 const baseURL = 'https://jsonplaceholder.typicode.com/posts';
 
+// One can also creat an axios instance such as below:
+const client = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com/posts',
+});
+// And then use it with the following syntaxe:
+client.get('/1');
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({ title: 'a' });
